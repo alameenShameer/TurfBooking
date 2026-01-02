@@ -1,0 +1,53 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}TurfBooking | Online Turf Booking{% endblock %}
+
+{% block navbar %}
+<nav class="navbar">
+    <div class="logo">
+        ⚽ TurfBooking
+    </div>
+
+    <ul class="nav-links">
+        <li>
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Registration ▾</a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{% url 'user_signup' %}">User</a>
+                </li>
+                <li>
+                    <a href="{% url 'owner_signup' %}">Turf Owner</a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="{% url 'login' %}">Login</a>
+        </li>
+    </ul>
+</nav>
+{% endblock %}
+
+
+{% block content %}
+<section class="hero"
+    style="background-image: url('{% static "images/hero.jpg" %}');">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>Book Sports Turfs Near You</h1>
+        <p>Easy. Fast. Reliable turf booking platform.</p>
+
+        <div class="hero-buttons">
+            <a href="{% url 'user_signup' %}" class="btn primary">User Registration</a>
+            <a href="{% url 'owner_signup' %}" class="btn secondary">Turf Owner Registration</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

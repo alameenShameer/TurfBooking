@@ -18,7 +18,7 @@ from django.urls import path,include
 from core.views import home
 
 urlpatterns = [
-    path('', home, name='home'),   # 👈 LANDING PAGE
+    path('', home, name='home'),   
     path('admin/', admin.site.urls),
     path('booking/', include('booking.urls')),
     path('locations/', include('locations.urls')),
