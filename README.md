@@ -13,7 +13,7 @@ This repository contains a clean and refactored version of the project, intended
 
 ## 🛠️ Tech Stack
 - Backend: Django 4.2
-- Database: MySQL
+- Database: SQLite
 - Frontend: HTML, CSS (Django Templates)
 - Python: 3.10+
 
@@ -43,7 +43,7 @@ source venv/bin/activate
 ### 3. Install Dependencies
 pip install -r requirements.txt  
 
-## 🗄️ Database Configuration (MySQL)
+## 🗄️ Database Configuration (SQLite)
 
 Create database:
 CREATE DATABASE gamevillage;
@@ -51,14 +51,11 @@ CREATE DATABASE gamevillage;
 Update `settings.py`:
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gamevillage',
-        'USER': 'your_mysql_user',
-        'PASSWORD': 'your_mysql_password',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 ## 🔄 Run Project
 python manage.py migrate  
