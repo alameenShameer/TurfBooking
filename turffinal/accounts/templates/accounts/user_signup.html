@@ -1,0 +1,22 @@
+<h2>User Signup</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <p style="color:red;">{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+
+  <label>Username</label><br>
+  <input type="text" name="username" required><br><br>
+
+  <label>Password</label><br>
+  <input type="password" name="password" required><br><br>
+
+  <button type="submit">Signup as User</button>
+</form>
+
+<br>
+<a href="{% url 'login' %}">Already have an account? Login</a>

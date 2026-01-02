@@ -15,8 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from core.views import home
 
 urlpatterns = [
-    path('',include("tapp.urls")),
+    path('', home, name='home'),   # 👈 LANDING PAGE
+    path('admin/', admin.site.urls),
+    path('booking/', include('booking.urls')),
+    path('locations/', include('locations.urls')),
+    path('turfs/', include('turfs.urls')),
+    path("accounts/", include("accounts.urls")),
+
 ]

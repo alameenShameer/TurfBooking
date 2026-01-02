@@ -1,5 +1,0 @@
-where python3.10
-py -3.9 -c "import sys; print(sys.executable)"
-py -3.10 -c "import sys; print(sys.executable)"
-"C:\Users\alame\AppData\Local\Programs\Python\Python310\Scripts\pip.exe" --version
-doskey /history > history.txt

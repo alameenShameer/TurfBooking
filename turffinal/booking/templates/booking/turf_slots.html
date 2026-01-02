@@ -1,0 +1,21 @@
+{% if messages %}
+  {% for message in messages %}
+    <p style="color:red;">{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<h2>Slots for {{ turf.name }}</h2>
+
+<ul>
+  {% for slot in slots %}
+    <li>
+      {{ slot.start_time }} - {{ slot.end_time }} | ₹{{ slot.price }}
+
+      <form method="post" action="{% url 'book_slot' slot.id %}">
+        {% csrf_token %}
+        <input type="date" name="date" required>
+        <button type="submit">Book</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>

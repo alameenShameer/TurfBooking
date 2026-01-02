@@ -1,0 +1,11 @@
+<h1>Districts</h1>
+
+<ul>
+  {% for district in districts %}
+    <li>
+      <a href="{% url 'location_list' district.id %}">
+        {{ district.name }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

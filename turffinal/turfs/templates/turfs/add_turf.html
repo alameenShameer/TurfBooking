@@ -1,0 +1,64 @@
+<h2>Add New Turf</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <label>Turf Name</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Phone</label><br>
+    <input type="text" name="phone" required><br><br>
+
+    <label>Email</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Address</label><br>
+    <textarea name="address" required></textarea><br><br>
+
+    <label>Area (sqft)</label><br>
+    <input type="number" name="area_sqft" required><br><br>
+
+    <!-- DISTRICT -->
+    <label>District</label><br>
+
+<select id="districtSelect">
+    <option value="">-- Select District --</option>
+    {% for d in districts %}
+        <option value="{{ d.id }}"
+            {% if d.id|stringformat:"s" == selected_district %}selected{% endif %}>
+            {{ d.name }}
+        </option>
+    {% endfor %}
+</select>
+
+
+    <br><br>
+
+    <!-- LOCATION -->
+    <label>Location</label><br>
+    <select name="location" required>
+        <option value="">-- Select Location --</option>
+        {% for l in locations %}
+            <option value="{{ l.id }}">{{ l.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- KEEP DISTRICT DURING POST -->
+    <input type="hidden" name="district" value="{{ selected_district }}">
+
+    <br><br>
+
+    <button type="submit">Add Turf</button>
+</form>
+
+<br>
+<a href="{% url 'turf_dashboard' %}">← Back to Dashboard</a>
+
+<script>
+document.getElementById("districtSelect").addEventListener("change", function () {
+    const districtId = this.value;
+    if (districtId) {
+        window.location.href = "?district=" + districtId;
+    }
+});
+</script>

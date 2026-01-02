@@ -1,0 +1,25 @@
+<h1>My Bookings</h1>
+
+{% if bookings %}
+  <table border="1" cellpadding="10">
+    <tr>
+      <th>Turf</th>
+      <th>Slot</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+
+    {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.slot.turf.name }}</td>
+        <td>
+          {{ booking.slot.start_time }} - {{ booking.slot.end_time }}
+        </td>
+        <td>{{ booking.date }}</td>
+        <td>{{ booking.status }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p>You have no bookings yet.</p>
+{% endif %}

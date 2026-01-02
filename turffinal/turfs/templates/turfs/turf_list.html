@@ -1,0 +1,11 @@
+<h1>All Turfs</h1>
+
+<ul>
+  {% for turf in turfs %}
+    <li>
+      <a href="{% url 'turf_detail' turf.id %}">
+        {{ turf.name }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

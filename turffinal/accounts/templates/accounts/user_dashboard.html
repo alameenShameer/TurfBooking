@@ -1,0 +1,57 @@
+<h2>User Dashboard</h2>
+
+<!-- 🔝 TOP BAR -->
+<div style="margin-bottom: 20px;">
+    <strong>Welcome, {{ request.user.username }}</strong>
+    |
+    <a href="{% url 'my_bookings' %}">My Bookings</a>
+    |
+    <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+<hr>
+
+<h3>Find Turfs</h3>
+
+<form method="get">
+    <label>District:</label>
+    <select name="district" onchange="this.form.submit()">
+        <option value="">-- Select District --</option>
+        {% for d in districts %}
+            <option value="{{ d.id }}"
+                {% if d.id|stringformat:"s" == selected_district %}selected{% endif %}>
+                {{ d.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Location:</label>
+    <select name="location" onchange="this.form.submit()">
+        <option value="">-- Select Location --</option>
+        {% for l in locations %}
+            <option value="{{ l.id }}"
+                {% if l.id|stringformat:"s" == selected_location %}selected{% endif %}>
+                {{ l.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<hr>
+
+{% if turfs %}
+    <ul>
+        {% for turf in turfs %}
+            <li>
+                <strong>{{ turf.name }}</strong><br>
+                {{ turf.location.name }} ({{ turf.location.district.name }})<br>
+                <a href="{% url 'turf_slots' turf.id %}">View Slots</a>
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No turfs available for the selected area.</p>
+{% endif %}

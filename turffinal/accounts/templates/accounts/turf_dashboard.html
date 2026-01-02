@@ -1,0 +1,77 @@
+<h2>Turf Owner Dashboard</h2>
+
+<!-- 🔝 TOP BAR -->
+<div style="margin-bottom: 20px;">
+    <strong>Welcome, {{ request.user.username }}</strong>
+    |
+    <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+<hr>
+
+<h3>My Turfs</h3>
+
+<a href="{% url 'add_turf' %}">➕ Add New Turf</a>
+
+<br><br>
+
+{% if turfs %}
+    <ul>
+        {% for turf in turfs %}
+            <li>
+                <strong>{{ turf.name }}</strong><br>
+                {{ turf.location.name }} ({{ turf.location.district.name }})<br>
+                Status:
+                {% if turf.is_active %}
+                    Active
+                {% else %}
+                    Inactive
+                {% endif %}
+                <br>
+                <a href="{% url 'add_slot' turf.id %}">Add Slots</a>
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You haven’t added any turfs yet.</p>
+{% endif %}
+
+<hr>
+
+<h3>Bookings</h3>
+
+{% if bookings %}
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>User</th>
+            <th>Turf</th>
+            <th>Slot</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.user.username }}</td>
+                <td>{{ booking.slot.turf.name }}</td>
+                <td>{{ booking.slot.start_time }} - {{ booking.slot.end_time }}</td>
+                <td>{{ booking.date }}</td>
+                <td>{{ booking.status }}</td>
+                <td>
+                    {% if booking.status == "PENDING" %}
+                        <a href="{% url 'confirm_booking' booking.id %}">Confirm</a>
+                        |
+                        <a href="{% url 'cancel_booking' booking.id %}">Cancel</a>
+
+                    {% else %}
+                        {{ booking.status }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No bookings yet.</p>
+{% endif %}
