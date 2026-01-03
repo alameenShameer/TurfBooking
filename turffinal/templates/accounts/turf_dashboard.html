@@ -1,77 +1,167 @@
-<h2>Turf Owner Dashboard</h2>
+{% extends "base/base.html" %}
+{% load static %}
 
-<!-- 🔝 TOP BAR -->
-<div style="margin-bottom: 20px;">
-    <strong>Welcome, {{ request.user.username }}</strong>
-    |
-    <a href="{% url 'logout' %}">Logout</a>
+{% block title %}Turf Owner Dashboard | TurfBooking{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            ⚽ TurfBooking
+        </div>
+
+     <nav class="sidebar-nav">
+    <a href="{% url 'turf_dashboard' %}?tab=dashboard"
+       class="{% if tab == 'dashboard' %}active{% endif %}">
+        🏠 Dashboard
+    </a>
+
+    <a href="{% url 'turf_dashboard' %}?tab=turfs"
+       class="{% if tab == 'turfs' %}active{% endif %}">
+        🏟 My Turfs
+    </a>
+
+    <a href="{% url 'turf_dashboard' %}?tab=bookings"
+       class="{% if tab == 'bookings' %}active{% endif %}">
+        📅 Bookings
+    </a>
+
+    <a href="{% url 'logout' %}" class="logout">🚪 Logout</a>
+</nav>
+    </aside>
+
+    <main class="dashboard-main">
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="dashboard-section {% if tab == 'dashboard' %}active{% endif %}">
+
+        <div class="dashboard-header">
+            <div>
+                <h1>Turf Owner Dashboard</h1>
+                <p>Welcome back, <strong>{{ request.user.username }}</strong></p>
+            </div>
+
+            <a href="{% url 'add_turf' %}" class="primary-btn">
+                + Add New Turf
+            </a>
+        </div>
+
+        <div class="overview">
+            <div class="overview-card">
+                <h2>{{ turfs|length }}</h2>
+                <p>Total Turfs</p>
+            </div>
+
+            <div class="overview-card">
+                <h2>{{ bookings|length }}</h2>
+                <p>Total Bookings</p>
+            </div>
+
+            <div class="overview-card success">
+                <h2>{{ bookings|length }}</h2>
+                <p>Confirmed</p>
+            </div>
+        </div>
+
+        <h2>My Turfs</h2>
+        <div class="card-grid">
+            {% for turf in turfs %}
+            <div class="card">
+                <h3>{{ turf.name }}</h3>
+                <p>📍 {{ turf.location.name }} ({{ turf.location.district.name }})</p>
+                <span class="badge active">Active</span>
+                <a href="{% url 'add_slot' turf.id %}" class="link">Add Slots →</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ================= MY TURFS ================= -->
+    <section class="dashboard-section {% if tab == 'turfs' %}active{% endif %}">
+        <h2>My Turfs</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for turf in turfs %}
+                <tr>
+                    <td>{{ turf.name }}</td>
+                    <td>{{ turf.location.name }} ({{ turf.location.district.name }})</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>
+                        <a href="{% url 'add_slot' turf.id %}">Add Slots</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ================= BOOKINGS ================= -->
+    <section class="dashboard-section {% if tab == 'bookings' %}active{% endif %}">
+        <h2>Bookings</h2>
+
+        {% if bookings %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Turf</th>
+                    <th>Slot</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.user.username }}</td>
+                    <td>{{ booking.slot.turf.name }}</td>
+                    <td>{{ booking.slot.start_time }} - {{ booking.slot.end_time }}</td>
+                    <td>{{ booking.date }}</td>
+                    <td><span class="badge success">{{ booking.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No bookings yet.</p>
+        {% endif %}
+    </section>
+
+</main>
 </div>
 
-<hr>
+<!-- ================= JS ================= -->
+<script>
+function showSection(section, el) {
+    // hide all sections
+    document.querySelectorAll('.dashboard-section').forEach(sec => {
+        sec.classList.remove('active');
+    });
 
-<h3>My Turfs</h3>
+    // remove active class from links
+    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+        link.classList.remove('active');
+    });
 
-<a href="{% url 'add_turf' %}">➕ Add New Turf</a>
+    // show selected section
+    document.getElementById(section + '-section').classList.add('active');
+    el.classList.add('active');
+}
+</script>
 
-<br><br>
-
-{% if turfs %}
-    <ul>
-        {% for turf in turfs %}
-            <li>
-                <strong>{{ turf.name }}</strong><br>
-                {{ turf.location.name }} ({{ turf.location.district.name }})<br>
-                Status:
-                {% if turf.is_active %}
-                    Active
-                {% else %}
-                    Inactive
-                {% endif %}
-                <br>
-                <a href="{% url 'add_slot' turf.id %}">Add Slots</a>
-            </li>
-            <br>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>You haven’t added any turfs yet.</p>
-{% endif %}
-
-<hr>
-
-<h3>Bookings</h3>
-
-{% if bookings %}
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>User</th>
-            <th>Turf</th>
-            <th>Slot</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-
-        {% for booking in bookings %}
-            <tr>
-                <td>{{ booking.user.username }}</td>
-                <td>{{ booking.slot.turf.name }}</td>
-                <td>{{ booking.slot.start_time }} - {{ booking.slot.end_time }}</td>
-                <td>{{ booking.date }}</td>
-                <td>{{ booking.status }}</td>
-                <td>
-                    {% if booking.status == "PENDING" %}
-                        <a href="{% url 'confirm_booking' booking.id %}">Confirm</a>
-                        |
-                        <a href="{% url 'cancel_booking' booking.id %}">Cancel</a>
-
-                    {% else %}
-                        {{ booking.status }}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <p>No bookings yet.</p>
-{% endif %}
+{% endblock %}

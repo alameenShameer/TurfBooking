@@ -1,38 +1,65 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
+{% extends "base/base.html" %}
+{% load static %}
 
-<h2>Login</h2>
+{% block title %}Login | TurfBooking{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
 
-{% if messages %}
-  {% for message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endif %}
+{# Lock scroll & hide navbar on auth page #}
+{% block body_class %}no-scroll{% endblock %}
+{% block navbar %}{% endblock %}
 
-<form method="post">
-  {% csrf_token %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <h2>Login</h2>
+        <p class="auth-subtitle">Welcome back! Please login to continue</p>
 
-  <label>Username</label><br>
-  <input type="text" name="username" required><br><br>
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <p class="auth-error">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
 
-  <label>Password</label><br>
-  <input type="password" name="password" required><br><br>
+        <form method="post">
+            {% csrf_token %}
 
-  <button type="submit">Login</button>
-</form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    autofocus
+                >
+            </div>
 
-<hr>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                >
+            </div>
 
-<p>New here?</p>
+            <button type="submit" class="auth-btn">
+                Login
+            </button>
+        </form>
 
-<a href="{% url 'user_signup' %}">Signup as User</a>
-<br><br>
-<a href="{% url 'owner_signup' %}">Signup as Turf Owner</a>
+        <div class="auth-divider">
+            <span>New here?</span>
+        </div>
 
-
-</body>
-</html>
+        <div class="auth-links">
+            <a href="{% url 'user_signup' %}">Signup as User</a>
+            <a href="{% url 'owner_signup' %}">Signup as Turf Owner</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

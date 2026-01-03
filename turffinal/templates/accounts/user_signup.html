@@ -1,22 +1,59 @@
-<h2>User Signup</h2>
+{% extends "base/base.html" %}
+{% load static %}
 
-{% if messages %}
-  {% for message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endif %}
+{% block title %}User Signup | TurfBooking{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+{# Lock scroll only for this page #}
+{% block body_class %}no-scroll{% endblock %}
 
-<form method="post">
-  {% csrf_token %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <h2>User Signup</h2>
+        <p class="auth-subtitle">Create your account to book turfs</p>
 
-  <label>Username</label><br>
-  <input type="text" name="username" required><br><br>
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <p class="auth-error">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
 
-  <label>Password</label><br>
-  <input type="password" name="password" required><br><br>
+        <form method="post">
+            {% csrf_token %}
 
-  <button type="submit">Signup as User</button>
-</form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    autofocus
+                >
+            </div>
 
-<br>
-<a href="{% url 'login' %}">Already have an account? Login</a>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="auth-btn">
+                Signup as User
+            </button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account?
+            <a href="{% url 'login' %}">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

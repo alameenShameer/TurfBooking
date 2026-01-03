@@ -149,3 +149,18 @@ def owner_signup(request):
         return redirect('turf_dashboard')
 
     return render(request, 'accounts/owner_signup.html')
+
+def turf_dashboard(request):
+    # get tab from URL (?tab=...)
+    tab = request.GET.get('tab', 'dashboard')
+
+    turfs = Turf.objects.filter(owner=request.user)
+    bookings = Booking.objects.filter(slot__turf__owner=request.user)
+
+    context = {
+        'tab': tab,
+        'turfs': turfs,
+        'bookings': bookings,
+    }
+
+    return render(request, 'accounts/turf_dashboard.html', context)

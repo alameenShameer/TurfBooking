@@ -1,0 +1,146 @@
+/* ===== AUTH PAGES ===== */
+/* Lock scroll */
+.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Auth layout */
+.auth-page {
+    height: calc(100vh - 72px); /* navbar height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f9fafb;
+    padding: 0 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.auth-card h2 {
+    text-align: center;
+    margin-bottom: 6px;
+    font-size: 26px;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* Error message */
+.auth-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Form */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-group input {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+/* Submit button */
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    background: #22c55e;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.auth-btn:hover {
+    background: #16a34a;
+}
+
+/* Footer */
+.auth-footer {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.auth-footer a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Divider in login page */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 22px 0 16px;
+    color: #777;
+    font-size: 13px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.auth-divider span {
+    padding: 0 10px;
+}
+
+/* Signup links */
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.auth-links a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
