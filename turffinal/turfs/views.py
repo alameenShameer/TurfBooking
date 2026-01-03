@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Turf
 from locations.models import Location,District
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from booking.models import Slot
 
 
 def turf_list(request):
@@ -76,3 +78,35 @@ def add_turf(request):
             "selected_district": district_id,
         }
     )
+def get_locations(request):
+    district_id = request.GET.get("district")
+
+    locations = Location.objects.filter(
+        district_id=district_id
+    ).values("id", "name")
+
+    return JsonResponse(list(locations), safe=False)
+
+def turf_list(request):
+    turfs = Turf.objects.select_related("location__district")
+    districts = District.objects.all()
+
+    return render(request, "turfs/turf_list.html", {
+        "turfs": turfs,
+        "districts": districts
+    })
+
+def turf_dashboard(request):
+    tab = request.GET.get("tab", "dashboard")
+
+    turfs = Turf.objects.filter(owner=request.user)
+
+    slots = Slot.objects.filter(
+        turf__owner=request.user   # ✅ THIS IS THE KEY FIX
+    ).select_related("turf")
+
+    return render(request, "turfs/turf_dashboard.html", {
+        "tab": tab,
+        "turfs": turfs,
+        "slots": slots,
+    })

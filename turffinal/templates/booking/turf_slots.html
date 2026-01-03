@@ -1,21 +1,51 @@
-{% if messages %}
-  {% for message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slots</title>
 
-<h2>Slots for {{ turf.name }}</h2>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/turf_slots.css' %}">
+</head>
+<body>
 
-<ul>
-  {% for slot in slots %}
-    <li>
-      {{ slot.start_time }} - {{ slot.end_time }} | ₹{{ slot.price }}
+<div class="page-container">
 
-      <form method="post" action="{% url 'book_slot' slot.id %}">
-        {% csrf_token %}
-        <input type="date" name="date" required>
-        <button type="submit">Book</button>
-      </form>
-    </li>
-  {% endfor %}
-</ul>
+
+    <h1>Slots for {{ turf.name }}</h1>
+
+    <div class="slots-grid">
+
+        {% for slot in slots %}
+        <div class="slot-card">
+            <div class="slot-time">
+                {{ slot.start_time }} – {{ slot.end_time }}
+            </div>
+
+            <div class="slot-price">
+                ₹{{ slot.price }}
+            </div>
+
+            <form method="post" action="{% url 'book_slot' slot.id %}">
+                {% csrf_token %}
+                <input type="date" name="date" required>
+                <button type="submit">Book</button>
+            </form>
+        </div>
+        {% empty %}
+        <p class="empty">No slots available</p>
+        {% endfor %}
+
+    </div>
+
+    <!-- BOTTOM BACK BUTTON -->
+    <div class="bottom-actions">
+        <a href="{% url 'user_dashboard' %}" class="btn-back">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

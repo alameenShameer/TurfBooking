@@ -9,81 +9,105 @@
 </head>
 <body>
 
-    <div class="page-container">
+<div class="page-container">
 
-        <h2>Add New Turf</h2>
+    <h2>Add New Turf</h2>
 
-        <form method="post">
-            {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
 
-            <div class="form-group">
-                <label>Turf Name</label>
-                <input type="text" name="name" required>
-            </div>
+        <div class="form-group">
+            <label>Turf Name</label>
+            <input type="text" name="name" required>
+        </div>
 
-            <div class="form-group">
-                <label>Phone</label>
-                <input type="text" name="phone" required>
-            </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="phone" required>
+        </div>
 
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required>
-            </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" required>
+        </div>
 
-            <div class="form-group">
-                <label>Address</label>
-                <textarea name="address" required></textarea>
-            </div>
+        <div class="form-group">
+            <label>Area (sqft)</label>
+            <input type="number" name="area_sqft" required>
+        </div>
 
-            <div class="form-group">
-                <label>Area (sqft)</label>
-                <input type="number" name="area_sqft" required>
-            </div>
+        <!-- FULL WIDTH -->
+        <div class="form-group full">
+            <label>Address</label>
+            <textarea name="address" required></textarea>
+        </div>
 
-            <!-- DISTRICT -->
-            <div class="form-group">
-                <label>District</label>
-                <select id="districtSelect">
-                    <option value="">-- Select District --</option>
-                    {% for d in districts %}
-                        <option value="{{ d.id }}"
-                            {% if d.id|stringformat:"s" == selected_district %}selected{% endif %}>
-                            {{ d.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+        <!-- DISTRICT -->
+        <div class="form-group">
+            <label>District</label>
+            <select id="districtSelect">
+                <option value="">-- Select District --</option>
+                {% for d in districts %}
+                    <option value="{{ d.id }}"
+                        {% if d.id|stringformat:"s" == selected_district %}selected{% endif %}>
+                        {{ d.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-            <!-- LOCATION -->
-            <div class="form-group">
-                <label>Location</label>
-                <select name="location" required>
-                    <option value="">-- Select Location --</option>
-                    {% for l in locations %}
-                        <option value="{{ l.id }}">{{ l.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <!-- LOCATION -->
+        <div class="form-group">
+            <label>Location</label>
+           <select name="location" id="locationSelect" required>
+                <option value="">-- Select Location --</option>
+            </select>
+        </div>
 
-            <!-- KEEP DISTRICT DURING POST -->
-            <input type="hidden" name="district" value="{{ selected_district }}">
+        <!-- KEEP DISTRICT DURING POST -->
+        <input type="hidden" name="district" value="{{ selected_district }}">
 
+        <!-- ACTION ROW -->
+        <div class="form-actions">
+            <a class="back-link" href="{% url 'turf_dashboard' %}">
+                ← Back to Dashboard
+            </a>
             <button type="submit">Add Turf</button>
-        </form>
+        </div>
 
-        <a class="back-link" href="{% url 'turf_dashboard' %}">← Back to Dashboard</a>
+    </form>
 
-    </div>
+</div>
 
-    <script>
-        document.getElementById("districtSelect").addEventListener("change", function () {
-            const districtId = this.value;
-            if (districtId) {
-                window.location.href = "?district=" + districtId;
-            }
-        });
-    </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    const districtSelect = document.getElementById("districtSelect");
+    const locationSelect = document.getElementById("locationSelect");
+
+    districtSelect.addEventListener("change", function () {
+        const districtId = this.value;
+
+        locationSelect.innerHTML = '<option value="">Loading...</option>';
+
+        fetch(`/locations/get-locations/?district=${districtId}`)
+            .then(res => res.json())
+            .then(data => {
+                locationSelect.innerHTML = '<option value="">-- Select Location --</option>';
+                data.forEach(loc => {
+                    const option = document.createElement("option");
+                    option.value = loc.id;
+                    option.textContent = loc.name;
+                    locationSelect.appendChild(option);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                locationSelect.innerHTML = '<option value="">Error loading</option>';
+            });
+    });
+
+});
+</script>
 </body>
 </html>

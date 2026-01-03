@@ -1,11 +1,104 @@
-<h1>All Turfs</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Turfs</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/turf_list.css' %}">
+</head>
+<body>
 
-<ul>
-  {% for turf in turfs %}
-    <li>
-      <a href="{% url 'turf_detail' turf.id %}">
-        {{ turf.name }}
-      </a>
-    </li>
-  {% endfor %}
-</ul>
+<div class="page-container">
+    <h2>All Turfs</h2>
+
+    <!-- FILTERS -->
+    <div class="filters">
+        <select id="districtFilter">
+            <option value="">All Districts</option>
+            {% for d in districts %}
+                <option value="{{ d.name }}">{{ d.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="locationFilter">
+            <option value="">All Locations</option>
+        </select>
+    </div>
+
+    <!-- TABLE -->
+    <table class="turf-table">
+        <thead>
+            <tr>
+                <th>Turf Name</th>
+                <th>District</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody id="turfTableBody">
+            {% for turf in turfs %}
+            <tr data-district="{{ turf.location.district.name }}"
+                data-location="{{ turf.location.name }}">
+                <td>
+                    <a href="{% url 'turf_detail' turf.id %}">
+                        {{ turf.name }}
+                    </a>
+                </td>
+                <td>{{ turf.location.district.name }}</td>
+                <td>{{ turf.location.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <div class="top-actions">
+    <a href="{% url 'home' %}" class="back-btn">
+      
+        ← Back to Home
+    </a>
+</div>
+</div>
+
+<script>
+const districtFilter = document.getElementById("districtFilter");
+const locationFilter = document.getElementById("locationFilter");
+const rows = document.querySelectorAll("#turfTableBody tr");
+
+// Populate locations based on district
+districtFilter.addEventListener("change", function () {
+    const selectedDistrict = this.value;
+    locationFilter.innerHTML = '<option value="">All Locations</option>';
+
+    const locations = new Set();
+
+    rows.forEach(row => {
+        if (!selectedDistrict || row.dataset.district === selectedDistrict) {
+            locations.add(row.dataset.location);
+        }
+    });
+
+    locations.forEach(loc => {
+        const opt = document.createElement("option");
+        opt.value = loc;
+        opt.textContent = loc;
+        locationFilter.appendChild(opt);
+    });
+
+    filterTable();
+});
+
+locationFilter.addEventListener("change", filterTable);
+
+function filterTable() {
+    const dVal = districtFilter.value;
+    const lVal = locationFilter.value;
+
+    rows.forEach(row => {
+        const matchDistrict = !dVal || row.dataset.district === dVal;
+        const matchLocation = !lVal || row.dataset.location === lVal;
+        row.style.display = (matchDistrict && matchLocation) ? "" : "none";
+    });
+}
+</script>
+
+</body>
+</html>

@@ -27,6 +27,11 @@
         🏟 My Turfs
     </a>
 
+    <a href="{% url 'turf_dashboard' %}?tab=slots"
+        class="{% if tab == 'slots' %}active{% endif %}">
+            🎟 Slots
+    </a>
+
     <a href="{% url 'turf_dashboard' %}?tab=bookings"
        class="{% if tab == 'bookings' %}active{% endif %}">
         📅 Bookings
@@ -109,6 +114,40 @@
             </tbody>
         </table>
     </section>
+
+<!-- ================= SLOTS ================= -->
+<section class="dashboard-section {% if tab == 'slots' %}active{% endif %}">
+    <h2>Slots</h2>
+
+    {% if slots %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Turf</th>
+                <th>Time</th>
+                <th>Price</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot in slots %}
+            <tr>
+                <td>{{ slot.turf.name }}</td>
+                <td>{{ slot.start_time }} – {{ slot.end_time }}</td>
+                <td>₹{{ slot.price }}</td>
+                <td>
+                    <span class="status active">
+                        {{ slot.status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No slots added yet.</p>
+    {% endif %}
+</section>
 
     <!-- ================= BOOKINGS ================= -->
     <section class="dashboard-section {% if tab == 'bookings' %}active{% endif %}">

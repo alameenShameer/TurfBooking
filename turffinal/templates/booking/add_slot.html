@@ -1,19 +1,46 @@
-<h2>Add Slot for {{ turf.name }}</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Slot</title>
 
-<form method="post">
-    {% csrf_token %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/add_slot.css' %}">
+</head>
+<body>
 
-    <label>Start Time</label><br>
-    <input type="time" name="start_time" required><br><br>
+<div class="page-container">
 
-    <label>End Time</label><br>
-    <input type="time" name="end_time" required><br><br>
+    <h2>Add Slot for {{ turf.name }}</h2>
 
-    <label>Price</label><br>
-    <input type="number" name="price" required><br><br>
+    <form method="post">
+        {% csrf_token %}
 
-    <button type="submit">Add Slot</button>
-</form>
+        <div class="form-group">
+            <label>Start Time</label>
+            <input type="time" name="start_time" required>
+        </div>
 
-<br>
-<a href="{% url 'turf_dashboard' %}">Back to Dashboard</a>
+        <div class="form-group">
+            <label>End Time</label>
+            <input type="time" name="end_time" required>
+        </div>
+
+        <div class="form-group full">
+            <label>Price</label>
+            <input type="number" name="price" required>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'turf_dashboard' %}" class="back-link">
+                ← Back to Dashboard
+            </a>
+            <button type="submit">Add Slot</button>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

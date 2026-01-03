@@ -6,7 +6,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from .models import Profile
 from turfs.models import Turf
-from booking.models import Booking
+from booking.models import Booking, Slot
+from locations.models import District, Location
+from django.utils import timezone
 
 
 def login_view(request):
@@ -73,36 +75,48 @@ def turf_dashboard(request):
 
 from locations.models import District, Location
 
-@login_required
 def user_dashboard(request):
-    if request.user.profile.role != "USER":
-        return redirect("login")
+    user = request.user
+    now = timezone.now()
+
+    # BOOKING COUNTS
+    total_bookings = Booking.objects.filter(user=user).count()
+    upcoming_bookings = Booking.objects.filter(
+        user=user,
+        slot__start_time__gte=now
+    ).count()
+    completed_bookings = Booking.objects.filter(
+        user=user,
+        slot__start_time__lt=now
+    ).count()
+
+    # FILTER DATA
+    selected_district = request.GET.get('district')
+    selected_location = request.GET.get('location')
 
     districts = District.objects.all()
     locations = Location.objects.none()
-    turfs = Turf.objects.filter(is_active=True)
+    turfs = Turf.objects.all()
 
-    district_id = request.GET.get("district")
-    location_id = request.GET.get("location")
+    if selected_district:
+        locations = Location.objects.filter(district_id=selected_district)
+        turfs = turfs.filter(location__district_id=selected_district)
 
-    if district_id:
-        locations = Location.objects.filter(district_id=district_id)
-        turfs = turfs.filter(location__district_id=district_id)
+    if selected_location:
+        turfs = turfs.filter(location_id=selected_location)
 
-    if location_id:
-        turfs = turfs.filter(location_id=location_id)
+    context = {
+        'total_bookings': total_bookings,
+        'upcoming_bookings': upcoming_bookings,
+        'completed_bookings': completed_bookings,
+        'districts': districts,
+        'locations': locations,
+        'turfs': turfs,
+        'selected_district': selected_district,
+        'selected_location': selected_location,
+    }
 
-    return render(
-        request,
-        "accounts/user_dashboard.html",
-        {
-            "turfs": turfs,
-            "districts": districts,
-            "locations": locations,
-            "selected_district": district_id,
-            "selected_location": location_id,
-        }
-    )
+    return render(request, 'accounts/user_dashboard.html', context)
 
 
 

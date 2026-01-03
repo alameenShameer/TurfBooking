@@ -14,5 +14,7 @@ urlpatterns = [
         name='turf_detail'
     ),
     path('add/', views.add_turf, name='add_turf'),
-
+    path("get-locations/", views.get_locations, name="get_locations"),  # ✅ NEW
 ]
+
+

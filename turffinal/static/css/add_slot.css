@@ -3,81 +3,69 @@
     font-family: Inter, system-ui, -apple-system, sans-serif;
 }
 
-/* Full screen layout */
 body {
     margin: 0;
     min-height: 100vh;
     background: #f8fafc;
-    color: #1f2937;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    color: #1f2937;
 }
 
-/* Page container now full width */
+/* Container */
 .page-container {
     width: 100%;
-    max-width: 1100px;
+    max-width: 600px;
     background: #ffffff;
-    padding: 32px 40px;
+    padding: 32px 36px;
     border-radius: 16px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
 }
 
 /* Heading */
 h2 {
-    margin-bottom: 28px;
+    margin-bottom: 26px;
     font-size: 24px;
     font-weight: 700;
 }
 
-/* Grid form layout */
+/* Form */
 form {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px 28px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
 }
 
-/* Full width fields */
+/* Full width */
 .form-group.full {
     grid-column: 1 / -1;
 }
 
 /* Labels */
 label {
-    display: block;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 6px;
+    display: block;
 }
 
 /* Inputs */
-input,
-textarea,
-select {
+input {
     width: 100%;
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid #d1d5db;
     font-size: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-textarea {
-    resize: none;
-    min-height: 90px;
-}
-
-/* Focus */
-input:focus,
-textarea:focus,
-select:focus {
+input:focus {
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* Button row */
+/* Actions */
 .form-actions {
     grid-column: 1 / -1;
     display: flex;
@@ -89,12 +77,12 @@ select:focus {
 /* Button */
 button {
     padding: 12px 26px;
+    background: #2563eb;
     border: none;
     border-radius: 10px;
-    background: #2563eb;
-    color: #ffffff;
-    font-size: 15px;
+    color: #fff;
     font-weight: 600;
+    font-size: 15px;
     cursor: pointer;
 }
 
@@ -113,8 +101,8 @@ button:hover {
     text-decoration: underline;
 }
 
-/* Responsive (mobile fallback) */
-@media (max-width: 768px) {
+/* Mobile */
+@media (max-width: 600px) {
     form {
         grid-template-columns: 1fr;
     }

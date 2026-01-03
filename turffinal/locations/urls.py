@@ -8,4 +8,5 @@ urlpatterns = [
         views.location_list,
         name='location_list'
     ),
+    path("get-locations/", views.get_locations, name="get_locations"),
 ]
